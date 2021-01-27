@@ -1,0 +1,38 @@
+server:
+  port: ${PORT0:8888}
+
+spring:
+  jackson:
+    time-zone: Asia/Shanghai
+  cloud:
+    stream:
+      bindings:
+        # 接和收的名字不能一样
+        test_user_event_input:
+          destination: test_user_event
+          group: TEST_USER_VHOST
+          binder: test_user_binder
+        # 接和收的名字不能一样
+        test_user_event_output:
+          destination: test_user_event
+          group: TEST_USER_VHOST
+          binder: test_user_binder
+      binders:
+        test_user_binder:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: ${RMQ_HOST:40.125.168.224}
+                port: ${RMQ_PORT:5672}
+                username: ${RMQ_USER:test_user}
+                password: ${RMQ_PASS:test_user_pwd}
+                virtual-host: ${RMQ_VHOST:TEST_USER_VHOST}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.stream: DEBUG
+    org.springframework.messaging: DEBUG
+    com.jerome: DEBUG
